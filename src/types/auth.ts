@@ -17,4 +17,21 @@ export interface LoginResponse {
     csrfToken: string;
 }
 
-//Logout
+//Register
+export interface AccountRegisterRequest {
+    email: string;
+    password: string;
+    isCustomer: string; 
+}
+
+//Forgot password
+export interface ChangePasswordRequest {
+    forgotPasswordToken: string;
+    newPassword: string;
+}
+//
+export interface UserResponse {
+    id: string;
+    email: string;
+    role: string;
+}

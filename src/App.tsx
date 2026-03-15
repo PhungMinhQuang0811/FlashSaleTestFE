@@ -1,15 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginPage from './pages/auth/LoginPage';
+import { BrowserRouter } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast'; // Thêm cái này để hiện thông báo đẹp
+import AppRoutes from './routes';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<h1 className="p-10">Home</h1>} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/customer" element={<h1 className="p-10">Customer</h1>} />
-        <Route path="/seller" element={<h1 className="p-10">Seller</h1>} />
-      </Routes>
+      {/* Toaster giúp hiện thông báo login thành công/thất bại mà không dùng alert */}
+      <Toaster position="top-right" reverseOrder={false} />
+      <AppRoutes />
     </BrowserRouter>
   );
 }
