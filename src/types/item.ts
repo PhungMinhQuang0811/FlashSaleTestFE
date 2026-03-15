@@ -33,6 +33,7 @@ export interface ItemResponse {
     name: string;
     description: string;
     originalPrice: number;
+    salePrice: number | null;
     imageUrl: string;
     quantity: number;
     itemType: EItemType;

@@ -1,37 +1,49 @@
+import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../pages/auth/LoginPage';
+import RegisterPage from '../pages/auth/RegisterPage';
+import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
+import VerifyEmailPage from '../pages/auth/VerifyEmailPage';
 
-// Giả lập các trang Dashboard (Bạn sẽ tạo file thật sau)
-const CustomerDashboard = () => <div className="p-10 text-2xl font-bold">🛒 Customer Flash Sale List</div>;
-const SellerDashboard = () => <div className="p-10 text-2xl font-bold">🏪 Seller Inventory Management</div>;
+// IMPORT TRANG THẬT Ở ĐÂY
+import CustomerDashboard from '../pages/customer/CustomerDashboard';
 
-// Component check quyền (Role Guard)
+// Giữ lại Seller giả lập nếu bạn chưa làm trang Seller
+const SellerDashboard = () => <div className="p-10 text-2xl font-bold italic text-orange-600">🏪 Seller: Quản lý kho hàng</div>;
+
 const ProtectedRoute = ({ children, allowedRole }: { children: React.ReactNode, allowedRole: string }) => {
   const userRole = localStorage.getItem('userRole');
   if (!userRole) return <Navigate to="/login" />;
-  return userRole === allowedRole ? children : <Navigate to="/login" />;
+  
+  // Nếu sai quyền, mình nên cho về trang 403 hoặc thông báo, 
+  // ở đây tạm thời cho về login như code cũ của bạn
+  return userRole === allowedRole ? (children as React.ReactElement) : <Navigate to="/login" />;
 };
 
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Mặc định vào Login */}
-      <Route path="/" element={<Navigate to="/login" />} />
+      {/* --- Public Routes --- */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/auth/forgot-password/verify" element={<ResetPasswordPage />} />
+      <Route path="/user/verify-email" element={<VerifyEmailPage/>} />
 
-      {/* Luồng Customer */}
+      {/* --- Luồng Customer (ĐÃ DẪN TỚI TRANG THẬT) --- */}
       <Route
-        path="/customer/*"
-        element={
-          <ProtectedRoute allowedRole="CUSTOMER">
-            <CustomerDashboard />
-          </ProtectedRoute>
-        }
-      />
+          path="/customer"
+          element={
+            <ProtectedRoute allowedRole="CUSTOMER">
+              <CustomerDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Luồng Seller */}
+      {/* --- Luồng Seller --- */}
       <Route
-        path="/seller/*"
+        path="/seller"
         element={
           <ProtectedRoute allowedRole="SELLER">
             <SellerDashboard />
@@ -39,7 +51,8 @@ const AppRoutes = () => {
         }
       />
 
-      {/* 404 - Bắt các link bừa bãi */}
+      {/* --- Điều hướng mặc định --- */}
+      <Route path="/" element={<Navigate to="/login" />} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );

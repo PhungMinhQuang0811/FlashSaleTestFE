@@ -15,6 +15,7 @@ export interface LoginRequest {
 export interface LoginResponse {
     userRole: ERole;
     csrfToken: string;
+    balance: number
 }
 
 //Register
